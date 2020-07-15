@@ -1,5 +1,5 @@
 {
-  "name": "petrbohac/pgsql",
+  "name": "bohacpetr/pgsql",
   "description": "",
   "type": "library",
   "license": "BSD-1-Clause",
@@ -21,6 +21,7 @@
 	}
   },
   "require": {
+	"bohacpetr/enum": "*",
 	"ext-json": "*",
 	"ext-mbstring": "*",
 	"ext-pgsql": "*",
