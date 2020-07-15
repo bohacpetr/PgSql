@@ -1,8 +1,8 @@
 {
-  "name": "bohyn/pgsql",
+  "name": "petrbohac/pgsql",
   "description": "",
   "type": "library",
-  "license": "BSD",
+  "license": "BSD-1-Clause",
   "authors": [
 	{
 	  "name": "Petr Bohac",
