@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+cd $( realpath $( dirname $0 )/.. )
+tests="tests/unit tests/integration"
+
+if [ $# -gt 0 ];
+then
+	tests="${@:1}"
+fi
+
+exit_code=0
+
+for test in ${tests}
+do
+	vendor/bin/phpunit --verbose --bootstrap=tests/bootstrap.php --colors=auto "${test}"
+	result=$?
+
+	if [ ${result} -ne  0 ]
+	then
+		exit_code=${result}
+	fi
+
+done
+
+exit ${exit_code}

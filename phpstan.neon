@@ -1,0 +1,21 @@
+includes:
+	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- vendor/phpstan/phpstan-phpunit/rules.neon
+
+parameters:
+	tmpDir: "temp"
+	level: max
+	checkMissingIterableValueType: false
+
+	paths:
+		- src
+		- tests
+
+	ignoreErrors:
+
+	autoload_directories:
+#		- src
+#		- tests
+
+	universalObjectCratesClasses:
+#		- stdClass

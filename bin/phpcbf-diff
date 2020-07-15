@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd $(realpath $(dirname $0)/..)
+
+SCAN_PATH=$( git diff --name-status -l 10000 origin/master | grep -v "^[DR]" | grep "\.php$" | cut -f 2 )
+SCAN_PATH="${SCAN_PATH} $( git diff --name-status -l 10000 origin/master | grep "^R" | grep -v "^R100" | grep "\.php$" | cut -f 3 )"
+
+vendor/bin/phpcbf -p -s --standard=codestyle.xml ${SCAN_PATH}
+
+exit 0

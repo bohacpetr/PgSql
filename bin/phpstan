@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd $( realpath $( dirname $0 )/.. )
+
+if [ $# -gt 0 ];
+then
+	tests="${@:1}"
+fi
+
+vendor/bin/phpstan --memory-limit=2G analyse ${tests}

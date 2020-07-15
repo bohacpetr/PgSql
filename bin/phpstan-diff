@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+ROOT_DIR=`realpath -m "${BASH_SOURCE[0]}/../.."`
+DIFF_FILE_LIST="tmp/phpstan-diff.list"
+
+cd "${ROOT_DIR}/tmp"
+
+echo "$( git diff --name-status -l 10000 origin/master | grep -v '^[DR]' | grep '\.php$' | cut -f 2 | sed 's/^/..\//' )" > "${ROOT_DIR}/${DIFF_FILE_LIST}"
+echo "$( git diff --name-status -l 10000 origin/master | grep '^R' | grep -v '^R100' | grep '\.php$' | cut -f 3 | sed 's/^/..\//' )" >> "${ROOT_DIR}/${DIFF_FILE_LIST}"
+
+cd "${ROOT_DIR}"
+
+vendor/bin/phpstan --memory-limit=2G analyse --paths-file="${DIFF_FILE_LIST}"
+
+#rm "${ROOT_DIR}/${DIFF_FILE_LIST}"
