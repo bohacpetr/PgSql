@@ -25,48 +25,64 @@ test:phpunit-unit-7.1:
   image: php:7.1
   stage: test
   script:
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.1:
   image: php:7.1
   stage: test
   script:
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - bin/phpunit tests/integration
 
 test:phpunit-unit-7.2:
   image: php:7.2
   stage: test
   script:
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.2:
   image: php:7.2
   stage: test
   script:
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - bin/phpunit tests/integration
 
 test:phpunit-unit-7.3:
   image: php:7.3
   stage: test
   script:
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.3:
   image: php:7.3
   stage: test
   script:
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - bin/phpunit tests/integration
 
 test:phpunit-unit-7.4:
   image: php:7.4
   stage: test
   script:
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.4:
   image: php:7.4
   stage: test
   script:
+    - pecl install xdebug
+    - docker-php-ext-enable xdebug
     - bin/phpunit tests/integration
 
 test:phpcs-7.4:
