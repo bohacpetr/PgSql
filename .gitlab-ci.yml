@@ -14,7 +14,10 @@ build:build-7.4:
     - ls -ls /etc/apt
     - cat /etc/apt/sources.list
     - apt-get update -yqq
-    - php -i
+#    - php -i
+    - ls -la /usr/local/lib/php/extensions/no-debug-non-zts-20190902
+    - cat /usr/local/etc/php
+    - cat /usr/local/etc/php/php.ini
     - apt-get install git wget php7.4-pgsql php7.4-sockets -yqq
 
     # install & run composer
@@ -33,7 +36,10 @@ build:build-7.1:
     - ls -ls /etc/apt
     - cat /etc/apt/sources.list
     - apt-get update -yqq
-    - php -i
+#    - php -i
+    - cat /usr/local/etc/php
+    - cat /usr/local/etc/php/php.ini
+    - ls -la /usr/local/lib/php/extensions
     - apt-get install git wget php7.1-pgsql php7.1-sockets -yqq
 
     # install & run composer
