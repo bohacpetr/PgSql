@@ -13,6 +13,7 @@
 
 	<rule ref="vendor/squizlabs/php_codesniffer/src/Standards/PSR12/ruleset.xml">
 		<exclude name="Generic.Files.LineLength.TooLong"/> <!-- Duplicate to Slevomat sniff -->
+		<exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/> <!-- Duplicate snif -->
 	</rule>
 
 	<rule ref="vendor/slevomat/coding-standard/SlevomatCodingStandard/ruleset.xml">
@@ -126,9 +127,9 @@
 		</properties>
 	</rule>
 
-	<rule name="SlevomatCodingStandard.ControlStructures.EarlyExit">
+	<rule ref="SlevomatCodingStandard.ControlStructures.EarlyExit">
 		<properties>
-			<property value="ignoreTrailingIfWithOneInstruction"/>
+			<property name="ignoreTrailingIfWithOneInstruction" value="1"/>
 		</properties>
 	</rule>
 

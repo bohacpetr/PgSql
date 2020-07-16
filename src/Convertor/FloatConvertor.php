@@ -24,5 +24,4 @@ class FloatConvertor implements ITypeConvertor
     {
         return $value !== null ? (string)$value : null;
     }
-
 }

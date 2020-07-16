@@ -42,13 +42,11 @@ class PgSqlBuilder
             array_keys($values)
         );
 
-        $i = 1;
-        $valuePlaceholders = array_map(
-            static function () use (&$i): string {
-                return '$' . $i++;
-            },
-            $values
-        );
+        $valuePlaceholders = [];
+
+        for ($i = 1; $i <= count($values); $i++) {
+            $valuePlaceholders[] = '$' . $i;
+        }
 
         $table = $this->escapeTableName($table);
 

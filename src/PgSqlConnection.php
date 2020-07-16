@@ -194,12 +194,27 @@ class PgSqlConnection
         $this->throwLastError($query, $params);
     }
 
+    /**
+     * Escapes a identifier (e.g. table, field names) for querying the database. It returns an escaped identifier string
+     * for PostgreSQL server. PgSqlConnection::escapeIdentifier() adds double quotes before and after data. Users should
+     * not add double quotes. Use of this function is recommended for identifier parameters in query. For SQL literals
+     * (i.e. parameters except bytea), PgSqlConnection::escapeLiteral() or PgSqlConnection::escapeString() must be used.
+     * For bytea type fields, PgSqlConnection::escapeBytea() must be used instead.
+     *
+     * @param string $value
+     * @return string
+     */
     public function escapeIdentifier(string $value): string
     {
         return pg_escape_identifier($this->conn, $value);
     }
 
     /**
+     * Escapes a literal for querying the PostgreSQL database. It returns an escaped literal in the PostgreSQL format.
+     * Adds quotes before and after data. Users should not add quotes. Use of this function is recommended instead of
+     * PgSqlConnection::escapeString(). If the type of the column is bytea, PgSqlConnection::escapeBytea() must be used
+     * instead. For escaping identifiers (e.g. table, field names), PgSqlConnection::escapeIdentifier() must be used.
+     *
      * @param string $value
      * @return string
      */
@@ -209,7 +224,10 @@ class PgSqlConnection
     }
 
     /**
-     * escapes a string for querying the database. It returns an escaped string in the PostgreSQL format without quotes.
+     * Escapes a string for querying the database. It returns an escaped string in the PostgreSQL format without quotes.
+     * PgSqlConnection::escapeLiteral() is more preferred way to escape SQL parameters for PostgreSQL. addslashes() must
+     * not be used with PostgreSQL. If the type of the column is bytea, PgSqlConnection::escapeBytea() must be used
+     * instead. PgSqlConnection::escapeIdentifier() must be used to escape identifiers (e.g. table names, field names)
      *
      * @param string $data
      * @return string
@@ -217,6 +235,17 @@ class PgSqlConnection
     public function escapeString(string $data): string
     {
         return pg_escape_string($this->conn, $data);
+    }
+
+    /**
+     * Escape a string for insertion into a bytea field
+     *
+     * @param string $binary
+     * @return string
+     */
+    public function escapeBytea(string $binary): string
+    {
+        return pg_escape_bytea($this->conn, $binary);
     }
 
     public function ping(): bool

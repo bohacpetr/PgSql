@@ -6,7 +6,6 @@ namespace bohyn\PgSql\Convertor;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Exception;
 use Throwable;
 
 class TimestampConvertor implements ITypeConvertor
@@ -26,7 +25,7 @@ class TimestampConvertor implements ITypeConvertor
 
         try {
             return DateTimeImmutable::createFromFormat(self::TIMESTAMP_FORMAT, $stringValue);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             throw new TypeConversionException(sprintf('Invalid timestamp value "%s"', $stringValue));
         }
     }
@@ -37,18 +36,17 @@ class TimestampConvertor implements ITypeConvertor
      */
     public function toString($value): ?string
     {
-        if($value === null) {
+        if ($value === null) {
             return null;
         }
 
-        if($value instanceof DateTimeInterface) {
+        if ($value instanceof DateTimeInterface) {
             return $value->format(self::TIMESTAMP_FORMAT);
         }
 
         try {
             return (new DateTimeImmutable($value))->format(self::TIMESTAMP_FORMAT);
-        }
-        catch (Throwable $e) {
+        } catch (Throwable $e) {
             throw new TypeConversionException(sprintf('Invalid date time "%s"', $value));
         }
     }

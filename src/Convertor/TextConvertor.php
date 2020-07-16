@@ -16,5 +16,4 @@ class TextConvertor implements ITypeConvertor
     {
         return $value !== null ? (string)$value : null;
     }
-
 }

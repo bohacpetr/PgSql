@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace bohyn\PgSql\Convertor;
 
-class BoolArrayConverter implements ITypeConvertor
+class BoolArrayConvertor implements ITypeConvertor
 {
 
     /** @var BoolConvertor */
     private $boolConvertor;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->boolConvertor = new BoolConvertor();
     }
 
@@ -28,7 +29,7 @@ class BoolArrayConverter implements ITypeConvertor
 
         return array_map(
             static function ($value): ?bool {
-                if(strtoupper($value) === 'NULL') {
+                if (strtoupper($value) === 'NULL') {
                     return null;
                 }
 
@@ -50,7 +51,7 @@ class BoolArrayConverter implements ITypeConvertor
 
         $values = array_map(
             static function ($value): string {
-                if($value === null) {
+                if ($value === null) {
                     return 'NULL';
                 }
 
