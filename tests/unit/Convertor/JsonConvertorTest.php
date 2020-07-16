@@ -18,7 +18,7 @@ class JsonConvertorTest extends TestCase
      * @param string|null $input
      * @param mixed $expected
      */
-    public function testFromString(string $input, $expected): void
+    public function testFromString(?string $input, $expected): void
     {
         $result = $this->convertor->fromString($input);
         $this->assertEquals($expected, $result);
