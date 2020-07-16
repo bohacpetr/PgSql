@@ -14,8 +14,8 @@ build:build-7.4:
     - ls -ls /etc/apt
     - cat /etc/apt/sources.list
     - apt-get update -yqq
-    - apt-get install git wget libpq-dev -yqq
-    - docker-php-ext-install pgsql sockets
+    - apt-get install git wget libpq-dev libzip-dev -yqq
+    - docker-php-ext-install pgsql sockets zip
 
     # install & run composer
     - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
@@ -33,8 +33,8 @@ build:build-7.1:
     - ls -ls /etc/apt
     - cat /etc/apt/sources.list
     - apt-get update -yqq
-    - apt-get install git wget libpq-dev -yqq
-    - docker-php-ext-install pgsql sockets
+    - apt-get install git wget libpq-dev libzip-dev -yqq
+    - docker-php-ext-install pgsql sockets zip
 
     # install & run composer
     - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
