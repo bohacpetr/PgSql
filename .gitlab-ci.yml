@@ -11,7 +11,8 @@ build:build-7.4:
   stage: build
   script:
     # install git
-    - cat /etc/apt/sources.list.d/*
+    - ls -ls /etc/apt
+    - cat /etc/apt/sources.list
     - apt-get update -yqq
     - apt-get install git wget php-pgsql php-sockets -yqq
 
@@ -28,7 +29,8 @@ build:build-7.1:
   stage: build
   script:
     # install git
-    - cat /etc/apt/sources.list.d/*
+    - ls -ls /etc/apt
+    - cat /etc/apt/sources.list
     - apt-get update -yqq
     - apt-get install git wget php-pgsql php-sockets -yqq
 
