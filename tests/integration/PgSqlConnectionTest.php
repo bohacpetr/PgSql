@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace bohyn\PgSql;
 
-use Closure;
 use PHPUnit\Framework\TestCase;
 
 class PgSqlConnectionTest extends TestCase
@@ -17,29 +16,78 @@ class PgSqlConnectionTest extends TestCase
 
     public function testConnect(): void
     {
-        new PgSqlConnection(self::DSN, PGSQL_CONNECT_FORCE_NEW);
+        $conn = new PgSqlConnection(self::DSN, PGSQL_CONNECT_FORCE_NEW);
+        $result = $conn->query('SELECT 1');
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(1, $result->numRows());
+        $this->assertEquals(1, $result->fetchColumn());
+
+        $this->assertEquals(self::DSN, $conn->getDsn());
 
         $this->expectException(PgSqlException::class);
-        $this->expectExceptionMessage("Connection error\nConnect\nNULL");
+        $this->expectExceptionMessage("Connection error\nConnect\narray (\n)");
 
         new PgSqlConnection('host=localhost user=nonexisting password=nonexisting');
     }
+    public function testQuery(): void {
+        $result = $this->conn->query('SELECT 1 WHERE 1 = $1', [1]);
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(1, $result->numRows());
+        $this->assertEquals(1, $result->fetchColumn());
+
+        $result = $this->conn->query('SELECT 1 WHERE 1 = $1', [2]);
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(0, $result->numRows());
+        $this->assertNull($result->fetchColumn());
+        $this->assertFalse($result->fetchAssoc());
+
+        $this->expectException(PgSqlException::class);
+        $this->expectExceptionMessage("ERROR:  syntax error at or near \"XXX\"\nLINE 1: XXX\n        ^");
+
+        $this->conn->query('XXX');
+    }
+
 
     public function testPing(): void
     {
         $result = $this->conn->ping();
         $this->assertTrue($result);
+        // @TODO how to test false?
+    }
 
-        (Closure::bind(
-            function (): void {
-                @pg_query('SELECT pg_terminate_backend(pg_backend_pid())');
-            },
-            $this->conn,
-            $this->conn
-        ))();
+    public function testTransactions(): void
+    {
+        $this->assertEquals(PGSQL_TRANSACTION_IDLE, $this->conn->transactionStatus());
 
-        $result = $this->conn->ping();
-        $this->assertFalse($result);
+        $result = $this->conn->begin();
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(0, $result->numRows());
+        $this->assertEquals(PGSQL_TRANSACTION_INTRANS, $this->conn->transactionStatus());
+
+        $result = $this->conn->rollback();
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(0, $result->numRows());
+        $this->assertEquals(PGSQL_TRANSACTION_IDLE, $this->conn->transactionStatus());
+
+        $result = $this->conn->commit();
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(0, $result->numRows());
+        $this->assertEquals(PGSQL_TRANSACTION_IDLE, $this->conn->transactionStatus());
+
+        $result = $this->conn->rollback();
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(0, $result->numRows());
+        $this->assertEquals(PGSQL_TRANSACTION_IDLE, $this->conn->transactionStatus());
+
+        $result = $this->conn->begin();
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(0, $result->numRows());
+        $this->assertEquals(PGSQL_TRANSACTION_INTRANS, $this->conn->transactionStatus());
+
+        $result = $this->conn->begin();
+        $this->assertInstanceOf(PgSqlStatement::class, $result);
+        $this->assertEquals(0, $result->numRows());
+        $this->assertEquals(PGSQL_TRANSACTION_INTRANS, $this->conn->transactionStatus());
     }
 
     public function testNotify(): void
@@ -47,6 +95,7 @@ class PgSqlConnectionTest extends TestCase
         $channel = md5((string)rand());
         $timeout = 10000;
 
+        $conn = new PgSqlConnection(self::DSN, PGSQL_CONNECT_FORCE_NEW);
         $this->conn->query(sprintf('LISTEN "%s"', $channel));
 
         $start = microtime(true);
@@ -54,23 +103,96 @@ class PgSqlConnectionTest extends TestCase
         $this->assertEquals([], $result);
         $end = microtime(true);
 
-        $this->assertTrue($end - $start >= $timeout / 1000000, 'getNotify did not waited 1s for timeout');
+        $this->assertTrue($end - $start >= $timeout / 1000000, 'getNotify did not waited for timeout');
 
-        $this->conn->query(sprintf('NOTIFY "%s"', $channel));
-        $result = $this->conn->getNotify();
-        unset($result['pid']);
-        $this->assertEquals(['message' => $channel, 'payload' => ''], $result);
+        $result = $conn->query('SELECT pg_backend_pid()');
+        $pid = $result->fetchColumn();
 
-        $this->conn->query(sprintf('NOTIFY "%s", \'xxx\'', $channel));
+        $conn->query(sprintf('NOTIFY "%s"', $channel));
         $result = $this->conn->getNotify();
-        unset($result['pid']);
-        $this->assertEquals(['message' => $channel, 'payload' => 'xxx'], $result);
+        $this->assertEquals(['message' => $channel, 'pid' => $pid, 'payload' => ''], $result);
+
+        $conn->query(sprintf('NOTIFY "%s", \'xxx\'', $channel));
+        $result = $this->conn->getNotify();
+        $this->assertEquals(['message' => $channel, 'pid' => $pid, 'payload' => 'xxx'], $result);
+    }
+
+    /**
+     * @dataProvider escapeStringDataProvider
+     * @param string|null $string
+     * @param string|null $expected
+     */
+    public function testEscapeString(string $string, string $expected): void
+    {
+        $result = $this->conn->escapeString($string);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider escapeLiteralDataProvider
+     * @param $string
+     * @param $expected
+     */
+    public function testEscapeLiteral(string $string, string $expected): void
+    {
+        $result = $this->conn->escapeLiteral($string);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @dataProvider escapeIdentifierDataProvider
+     * @param $string
+     * @param $expected
+     */
+    public function testEscapeIdentifier(string $string, string $expected): void
+    {
+        $result = $this->conn->escapeLiteral($string);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function escapeStringDataProvider(): array
+    {
+        return [
+            ['aa', 'aa'],
+            ['100', '100'],
+            ['aaa\'aa', "aaa''aa"],
+        ];
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function escapeLiteralDataProvider(): array
+    {
+        return [
+            ['aa', "'aa'"],
+            ['100', "'100'"],
+            ['aaa\'aa', "'aaa''aa'"],
+            ['FALSE', "'FALSE'"],
+        ];
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function escapeIdentifierDataProvider(): array
+    {
+        return [
+            ['aa', "'aa'"],
+            ['100', "'100'"],
+            ['aaa\'aa', "'aaa''aa'"],
+            ['aaa"aa', "'aaa\"aa'"],
+            ['FALSE', "'FALSE'"],
+        ];
     }
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->conn = new PgSqlConnection(self::DSN);
+        $this->conn = new PgSqlConnection(self::DSN, PGSQL_CONNECT_FORCE_NEW);
     }
 }

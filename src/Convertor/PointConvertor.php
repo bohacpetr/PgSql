@@ -46,13 +46,6 @@ class PointConvertor implements ITypeConvertor
             );
         }
 
-        if ($value instanceof Point) {
-            return sprintf('(%s,%s)', $value->getX(), $value->getY());
-        }
-
-        $type = gettype($value);
-        $type = $type === 'object' ? get_class($value) : $type;
-
-        throw new TypeConversionException('Invalid type. Expected Point got %s', $type);
+        return sprintf('(%s,%s)', $value->getX(), $value->getY());
     }
 }

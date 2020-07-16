@@ -44,6 +44,29 @@ class PgSqlBuilderTest extends TestCase
     }
 
     /**
+     * @dataProvider buildInsertDataProvider
+     * @param string $table
+     * @param mixed[] $values
+     * @param string $expected
+     */
+    public function testBuildInsert(string $table, array $values, string $expected): void
+    {
+        $sqlInsert = $this->builder->buildInsert($table, $values);
+        $this->assertEquals($expected, $sqlInsert);
+    }
+
+    /**
+     * @dataProvider buildDeleteDataProvider
+     * @param string $table
+     * @param mixed[] $predicates
+     * @param string $expected
+     */
+    public function testBuildDelete(string $table, array $predicates, string $expected) {
+        $sqlDelete = $this->builder->buildDelete($table, $predicates);
+        $this->assertEquals($expected, $sqlDelete);
+    }
+
+    /**
      * @dataProvider buildWhereDataProvider
      * @param mixed[] $predicates
      * @param string $expectedSqlFragment
@@ -124,6 +147,26 @@ class PgSqlBuilderTest extends TestCase
                 'UPDATE "test" SET "id" = $1, "name" = $2 WHERE "id" = $3 AND "name" = $4 RETURNING *',
                 [2, ['a', 'b'], 1, 'aaa'],
             ],
+        ];
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    public function buildInsertDataProvider(): array {
+        return [
+            ['test', ['id' => 1], 'INSERT INTO "test" ("id") VALUES ($1) RETURNING *'],
+            ['test', ['id' => 1, 'name' => 'aa'], 'INSERT INTO "test" ("id", "name") VALUES ($1, $2) RETURNING *'],
+        ];
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    public function buildDeleteDataProvider(): array {
+        return [
+            ['test', ['id' => 1], 'DELETE FROM "test" WHERE "id" = $1 RETURNING *'],
+            ['test', ['id' => 1, 'name' => 'aa'], 'DELETE FROM "test" WHERE "id" = $1 AND "name" = $2 RETURNING *'],
         ];
     }
 

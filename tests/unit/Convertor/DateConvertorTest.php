@@ -37,14 +37,30 @@ class DateConvertorTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testInvalidToString(): void
+    {
+        $this->expectException(TypeConversionException::class);
+        $this->expectExceptionMessage('Invalid date value "aaa"');
+
+        $this->convertor->toString('aaa');
+    }
+
+    public function testInvalidFromString(): void
+    {
+        $this->expectException(TypeConversionException::class);
+        $this->expectExceptionMessage('Invalid date value "aaa"');
+
+        $this->convertor->fromString('aaa');
+    }
+
     /**
      * @return string[][]|DateTimeInterface[][]
      */
     public function dataProvider(): array
     {
         return [
-            ['2020-07-15', new DateTimeImmutable('2020-07-15 00:00:00')],
-            ['2020-07-15', new DateTime('2020-07-15 00:00:00')],
+            ['2020-07-15', new DateTimeImmutable('2020-07-15 00:00:00.0')],
+            ['2020-07-15', new DateTime('2020-07-15 00:00:00.0')],
             [null, null],
         ];
     }

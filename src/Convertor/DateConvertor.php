@@ -47,6 +47,10 @@ class DateConvertor implements ITypeConvertor
             return $value->format(self::DATE_FORMAT);
         }
 
-        return (new DateTimeImmutable($value))->format(self::DATE_FORMAT);
+        try {
+            return (new DateTimeImmutable($value))->format(self::DATE_FORMAT);
+        } catch(Throwable $e) {
+            throw new TypeConversionException(sprintf('Invalid date value "%s"', $value));
+        }
     }
 }

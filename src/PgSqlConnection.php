@@ -200,27 +200,34 @@ class PgSqlConnection
     }
 
     /**
-     * @param mixed $value
+     * @param string $value
      * @return string
      */
-    public function escapeLiteral($value): string
+    public function escapeLiteral(string $value): string
     {
-        if (is_bool($value)) {
-            return $value ? 'TRUE' : 'FALSE';
-        }
-
         return pg_escape_literal($this->conn, $value);
     }
 
     /**
      * escapes a string for querying the database. It returns an escaped string in the PostgreSQL format without quotes.
      *
-     * @param mixed $data
+     * @param string $data
      * @return string
      */
-    public function escapeString($data): string
+    public function escapeString(string $data): string
     {
         return pg_escape_string($this->conn, $data);
+    }
+
+    public function ping(): bool
+    {
+        $result = @pg_ping($this->conn);
+
+        if ($result === true) {
+            return $result;
+        }
+
+        $this->throwLastError('Ping');
     }
 
     /**
@@ -242,17 +249,6 @@ class PgSqlConnection
         $this->socketBlock($timeout);
 
         return $this->getNotify();
-    }
-
-    public function ping(): bool
-    {
-        $result = @pg_ping($this->conn);
-
-        if ($result === true) {
-            return $result;
-        }
-
-        $this->throwLastError('Ping');
     }
 
     /**
