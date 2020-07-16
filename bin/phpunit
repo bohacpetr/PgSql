@@ -12,7 +12,7 @@ exit_code=0
 
 for test in ${tests}
 do
-	vendor/bin/phpunit --verbose --bootstrap=tests/bootstrap.php --colors=auto "${test}"
+	vendor/bin/phpunit --verbose --bootstrap=tests/bootstrap.php --configuration ./phpunit.xml --coverage-text --coverage-xml ./temp --colors=auto "${test}"
 	result=$?
 
 	if [ ${result} -ne  0 ]
