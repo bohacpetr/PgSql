@@ -12,8 +12,23 @@ build:build-7.4:
   script:
     # install git
     - apt-get update -yqq
-    - apt-get install git wget -yqq
-    - apt-get install php-pgsql php-sockets -yqq
+    - apt-get install git wget php-pgsql php-sockets -yqq
+
+    # install & run composer
+    - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php -r "if (hash_file('SHA384', 'composer-setup.php') === file_get_contents('installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
+    - php composer.phar install
+
+build:build-7.1:
+  image: php:7.1
+  stage: build
+  script:
+    # install git
+    - apt-get update -yqq
+    - apt-get install git wget php-pgsql php-sockets -yqq
 
     # install & run composer
     - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
@@ -26,14 +41,14 @@ build:build-7.4:
 test:phpunit-unit-7.1:
   image: php:7.1
   stage: test
-  needs: ["build:build-7.4"]
+  needs: ["build:build-7.1"]
   script:
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.1:
   image: php:7.1
   stage: test
-  needs: ["build:build-7.4"]
+  needs: ["build:build-7.1"]
   script:
     - bin/phpunit tests/integration
 
