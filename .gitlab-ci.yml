@@ -14,6 +14,7 @@ build:build-7.4:
     - ls -ls /etc/apt
     - cat /etc/apt/sources.list
     - apt-get update -yqq
+    - apt-cache search php | sort
     - apt-get install git wget php7.4-pgsql php7.4-sockets -yqq
 
     # install & run composer
@@ -32,6 +33,7 @@ build:build-7.1:
     - ls -ls /etc/apt
     - cat /etc/apt/sources.list
     - apt-get update -yqq
+    - apt-cache search php | sort
     - apt-get install git wget php7.1-pgsql php7.1-sockets -yqq
 
     # install & run composer
