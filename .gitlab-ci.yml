@@ -19,46 +19,40 @@ before_script:
     - php composer-setup.php
     - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
     - php composer.phar install
-   - mkdir temp/cache
+    - mkdir temp/cache
 
 test:phpunit-unit-7.1:
   image: php:7.1
   stage: test
-  needs: ["build:build-7.1"]
   script:
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.1:
   image: php:7.1
   stage: test
-  needs: ["build:build-7.1"]
   script:
     - bin/phpunit tests/integration
 
 test:phpunit-unit-7.2:
   image: php:7.2
   stage: test
-  needs: ["build:build-7.2"]
   script:
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.2:
   image: php:7.2
   stage: test
-  needs: ["build:build-7.2"]
   script:
     - bin/phpunit tests/integration
 
 test:phpunit-unit-7.3:
   image: php:7.3
-  needs: ["build:build-7.3"]
   stage: test
   script:
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.3:
   image: php:7.3
-  needs: ["build:build-7.3"]
   stage: test
   script:
     - bin/phpunit tests/integration
@@ -66,27 +60,23 @@ test:phpunit-integration-7.3:
 test:phpunit-unit-7.4:
   image: php:7.4
   stage: test
-  needs: ["build:build-7.4"]
   script:
     - bin/phpunit tests/unit
 
 test:phpunit-integration-7.4:
   image: php:7.4
   stage: test
-  needs: ["build:build-7.4"]
   script:
     - bin/phpunit tests/integration
 
-test:phpcs:
+test:phpcs-7.4:
   image: php:7.4
   stage: test
-  needs: ["build:build-7.4"]
   script:
     - bin/phpcs
 
-test:phpstan:
+test:phpstan-7.4:
   image: php:7.4
   stage: test
-  needs: ["build:build-7.4"]
   script:
     - bin/phpstan
