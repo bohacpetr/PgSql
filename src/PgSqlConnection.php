@@ -22,12 +22,13 @@ class PgSqlConnection
     public function __construct(string $dsn, int $params = 0)
     {
         $this->dsn = $dsn;
-        $this->conn = @pg_connect($this->dsn, $params);
+        $conn = @pg_connect($this->dsn, $params);
 
-        if (!is_resource($this->conn)) {
-            $this->throwLastError('Connect');
+        if (!is_resource($conn)) {
+            throw new PgSqlException('Connect failed');
         }
 
+        $this->conn = $conn;
         $this->sqlBuilder = new PgSqlBuilder($this);
     }
 
@@ -286,6 +287,11 @@ class PgSqlConnection
     private function socketBlock(int $timeout): void
     {
         $socket = pg_socket($this->conn);
+
+        if($socket === false) {
+            $this->throwLastError('Invalid socket');
+        }
+
         $read = [$socket];
         $write = $except = [];
         $sec = (int)($timeout / 1000000);
@@ -295,13 +301,13 @@ class PgSqlConnection
 
     /**
      * @param string $query
-     * @param mixed[]|null $params
+     * @param mixed[] $params
      * @throws PgSqlException
      */
     private function throwLastError(string $query, array $params = []): void
     {
         throw new PgSqlException(
-            is_resource($this->conn) ? pg_last_error($this->conn) : 'Connection error'
+            pg_last_error($this->conn)
                 . PHP_EOL
                 . $query
                 . PHP_EOL

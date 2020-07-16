@@ -18,7 +18,7 @@ class PgSqlStatement implements IteratorAggregate
     /**
      * Default class name for fetchObject
      *
-     * @var string
+     * @var string|null
      */
     private $className;
 
@@ -93,11 +93,12 @@ class PgSqlStatement implements IteratorAggregate
             ? pg_fetch_object($this->result, $row, $className)
             : pg_fetch_object($this->result, $row);
 
-        if ($row) {
-            return Helper::decodeRow($row, $this->fieldTypes);
+        /** @var object|bool $row */
+        if ($row === false) {
+            return false;
         }
 
-        return false;
+        return Helper::decodeRow($row, $this->fieldTypes);
     }
 
     /**

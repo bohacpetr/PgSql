@@ -24,11 +24,16 @@ class PointConvertor implements ITypeConvertor
         }
 
         [$x, $y] = explode(',', substr($stringValue, 1, -1));
+        $x = $this->floatConvertor->fromString($x);
+        $y = $this->floatConvertor->fromString($y);
 
-        return new Point(
-            $this->floatConvertor->fromString($x),
-            $this->floatConvertor->fromString($y)
-        );
+        if ($x === null || $y === null) {
+            throw new TypeConversionException(
+                'Invalid point coordinates given: ' . var_export(['x' => $x, 'y' => $y])
+            );
+        }
+
+        return new Point($x, $y);
     }
 
     public function toString($value): ?string

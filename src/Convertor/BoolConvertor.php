@@ -38,17 +38,6 @@ class BoolConvertor implements ITypeConvertor
             return $value === true ? 't' : 'f';
         }
 
-        switch ($value) {
-            case '0':
-            case 'f':
-            case 'false':
-                return 'f';
-            case '1':
-            case 't':
-            case 'true':
-                return 't';
-        }
-
         throw new TypeConversionException('Unexpected value, expecting boolean');
     }
 }

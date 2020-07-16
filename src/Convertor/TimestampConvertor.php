@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace bohyn\PgSql\Convertor;
 
+use bohyn\PgSql\PgSqlInternalError;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Throwable;
@@ -40,14 +41,20 @@ class TimestampConvertor implements ITypeConvertor
             return null;
         }
 
-        if ($value instanceof DateTimeInterface) {
-            return $value->format(self::TIMESTAMP_FORMAT);
+        if (!$value instanceof DateTimeInterface) {
+            try {
+                $value = new DateTimeImmutable($value);
+            } catch (Throwable $e) {
+                throw new TypeConversionException(sprintf('Invalid date time "%s"', $value));
+            }
         }
 
-        try {
-            return (new DateTimeImmutable($value))->format(self::TIMESTAMP_FORMAT);
-        } catch (Throwable $e) {
-            throw new TypeConversionException(sprintf('Invalid date time "%s"', $value));
+        $timespamp = $value->format(self::TIMESTAMP_FORMAT);
+
+        if($timespamp === false) {
+            throw new PgSqlInternalError('Invalid timestamp format');
         }
+
+        return $timespamp;
     }
 }

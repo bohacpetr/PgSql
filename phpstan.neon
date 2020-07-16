@@ -9,8 +9,9 @@ parameters:
 
 	paths:
 		- src
-		- tests
-
+	earlyTerminatingMethodCalls:
+		bohyn\PgSql\PgSqlConnection:
+			- throwLastError
 	ignoreErrors:
 
 	autoload_directories:

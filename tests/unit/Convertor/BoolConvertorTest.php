@@ -67,12 +67,6 @@ class BoolConvertorTest extends TestCase
             [true, 't'],
             [false, 'f'],
             [null, null],
-            [0, 'f'],
-            [1, 't'],
-            ['0', 'f'],
-            ['1', 't'],
-            ['true', 't'],
-            ['false', 'f'],
         ];
     }
 

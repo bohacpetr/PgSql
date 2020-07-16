@@ -29,11 +29,13 @@ class PgSqlConnectionTest extends TestCase
         // call explicitly garbage collector, because GC may not trigger immediately
 
         $this->expectException(PgSqlException::class);
-        $this->expectExceptionMessage("Connection error\nConnect\narray (\n)");
+        $this->expectExceptionMessage("Connect failed");
 
         new PgSqlConnection('host=localhost user=nonexisting password=nonexisting');
     }
-    public function testQuery(): void {
+
+    public function testQuery(): void
+    {
         $result = $this->conn->query('SELECT 1 WHERE 1 = $1', [1]);
         $this->assertInstanceOf(PgSqlStatement::class, $result);
         $this->assertEquals(1, $result->numRows());
@@ -50,7 +52,6 @@ class PgSqlConnectionTest extends TestCase
 
         $this->conn->query('XXX');
     }
-
 
     public function testPing(): void
     {
@@ -125,8 +126,8 @@ class PgSqlConnectionTest extends TestCase
 
     /**
      * @dataProvider escapeStringDataProvider
-     * @param string|null $string
-     * @param string|null $expected
+     * @param string $string
+     * @param string $expected
      */
     public function testEscapeString(string $string, string $expected): void
     {
@@ -136,8 +137,8 @@ class PgSqlConnectionTest extends TestCase
 
     /**
      * @dataProvider escapeLiteralDataProvider
-     * @param $string
-     * @param $expected
+     * @param string $string
+     * @param string $expected
      */
     public function testEscapeLiteral(string $string, string $expected): void
     {
@@ -147,8 +148,8 @@ class PgSqlConnectionTest extends TestCase
 
     /**
      * @dataProvider escapeIdentifierDataProvider
-     * @param $string
-     * @param $expected
+     * @param string $string
+     * @param string $expected
      */
     public function testEscapeIdentifier(string $string, string $expected): void
     {

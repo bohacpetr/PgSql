@@ -25,7 +25,7 @@ class DateConvertor implements ITypeConvertor
         }
 
         try {
-            $date = DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $stringValue);
+            $date = new DateTimeImmutable($stringValue);
 
             return $date->setTime(0, 0, 0, 0);
         } catch (Throwable $e) {

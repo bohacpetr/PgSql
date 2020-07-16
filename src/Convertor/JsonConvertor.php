@@ -30,6 +30,12 @@ class JsonConvertor implements ITypeConvertor
             return null;
         }
 
-        return json_encode($value);
+        $json = json_encode($value);
+
+        if($json === false) {
+            throw new TypeConversionException('Value cannot be serialized to JSON');
+        }
+
+        return $json;
     }
 }

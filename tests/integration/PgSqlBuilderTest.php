@@ -61,7 +61,8 @@ class PgSqlBuilderTest extends TestCase
      * @param mixed[] $predicates
      * @param string $expected
      */
-    public function testBuildDelete(string $table, array $predicates, string $expected) {
+    public function testBuildDelete(string $table, array $predicates, string $expected): void
+    {
         $sqlDelete = $this->builder->buildDelete($table, $predicates);
         $this->assertEquals($expected, $sqlDelete);
     }
@@ -153,7 +154,8 @@ class PgSqlBuilderTest extends TestCase
     /**
      * @return mixed[][]
      */
-    public function buildInsertDataProvider(): array {
+    public function buildInsertDataProvider(): array
+    {
         return [
             ['test', ['id' => 1], 'INSERT INTO "test" ("id") VALUES ($1) RETURNING *'],
             ['test', ['id' => 1, 'name' => 'aa'], 'INSERT INTO "test" ("id", "name") VALUES ($1, $2) RETURNING *'],
@@ -163,7 +165,8 @@ class PgSqlBuilderTest extends TestCase
     /**
      * @return mixed[][]
      */
-    public function buildDeleteDataProvider(): array {
+    public function buildDeleteDataProvider(): array
+    {
         return [
             ['test', ['id' => 1], 'DELETE FROM "test" WHERE "id" = $1 RETURNING *'],
             ['test', ['id' => 1, 'name' => 'aa'], 'DELETE FROM "test" WHERE "id" = $1 AND "name" = $2 RETURNING *'],
