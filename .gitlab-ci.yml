@@ -1,0 +1,95 @@
+cache:
+  paths:
+    - vendor/
+
+stages:
+  - build
+  - test
+
+build:build:
+  image: php:7.4
+  stage: build
+  script:
+    # install git
+    - apt-get update -yqq
+    - apt-get install git wget -yqq
+
+    # install & run composer
+    - wget https://composer.github.io/installer.sig -O - -q | tr -d '\n' > installer.sig
+    - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - php -r "if (hash_file('SHA384', 'composer-setup.php') === file_get_contents('installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
+    - php composer.phar install
+
+test:phpunit-unit-7.1:
+  image: php:7.1
+  stage: test
+  needs: ["build:build"]
+  script:
+    - bin/phpunit tests/unit
+
+test:phpunit-integration-7.1:
+  image: php:7.1
+  stage: test
+  needs: ["build:build"]
+  script:
+    - bin/phpunit tests/integration
+
+test:phpunit-unit-7.2:
+  image: php:7.2
+  stage: test
+  needs: ["build:build"]
+  script:
+    - bin/phpunit tests/unit
+
+test:phpunit-integration-7.2:
+  image: php:7.2
+  stage: test
+  needs: ["build:build"]
+  script:
+    - bin/phpunit tests/integration
+
+test:phpunit-unit-7.3:
+  image: php:7.3
+  needs: ["build:build"]
+  stage: test
+  script:
+    - bin/phpunit tests/unit
+
+test:phpunit-integration-7.3:
+  image: php:7.3
+  needs: ["build:build"]
+  stage: test
+  script:
+    - bin/phpunit tests/integration
+
+test:phpunit-unit-7.4:
+  image: php:7.4
+  stage: test
+  needs: ["build:build"]
+  script:
+    - bin/phpunit tests/unit
+
+test:phpunit-integration-7.4:
+  image: php:7.4
+  stage: test
+  needs: ["build:build"]
+  script:
+    - bin/phpunit tests/integration
+
+test:phpcs:
+  image: php:7.4
+  stage: test
+  needs: ["build:build"]
+  script:
+    - mkdir temp/cache
+    - bin/phpcs
+
+test:phpstan:
+  image: php:7.4
+  stage: test
+  needs: ["build:build"]
+  script:
+    - mkdir temp/cache
+    - bin/phpstan
