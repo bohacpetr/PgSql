@@ -288,7 +288,7 @@ class PgSqlConnection
     {
         $socket = pg_socket($this->conn);
 
-        if($socket === false) {
+        if ($socket === false) {
             $this->throwLastError('Invalid socket');
         }
 
@@ -308,10 +308,10 @@ class PgSqlConnection
     {
         throw new PgSqlException(
             pg_last_error($this->conn)
-                . PHP_EOL
-                . $query
-                . PHP_EOL
-                . var_export($params, true)
+            . PHP_EOL
+            . $query
+            . PHP_EOL
+            . var_export($params, true)
         );
     }
 }

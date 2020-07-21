@@ -32,7 +32,7 @@ class JsonConvertor implements ITypeConvertor
 
         $json = json_encode($value);
 
-        if($json === false) {
+        if ($json === false) {
             throw new TypeConversionException('Value cannot be serialized to JSON');
         }
 

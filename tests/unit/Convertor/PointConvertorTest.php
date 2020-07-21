@@ -35,7 +35,8 @@ class PointConvertorTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testIvalidToString() {
+    public function testInvalidToString()
+    {
         $this->expectException(TypeConversionException::class);
         $this->expectExceptionMessage('Value must be of type "bohyn\PgSql\DataType\Point" but "string" given');
 

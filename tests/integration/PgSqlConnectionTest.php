@@ -97,7 +97,8 @@ class PgSqlConnectionTest extends TestCase
 
     public function testNotify(): void
     {
-        $this->markAsRisky(); // This test sometimes fail
+        // This test sometimes fail
+        $this->markAsRisky();
 
         $channel = md5((string)rand());
         $timeout = 10000;

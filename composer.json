@@ -14,9 +14,6 @@
 	"psr-4": {
 	  "bohyn\\PgSql\\": [
 		"src"
-	  ],
-	  "bohyn\\Enum\\": [
-		"src/Enum"
 	  ]
 	}
   },

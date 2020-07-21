@@ -34,7 +34,8 @@ class IntegerConvertorTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testInvalidFromString(): void{
+    public function testInvalidFromString(): void
+    {
         $this->expectException(TypeConversionException::class);
         $this->expectExceptionMessage('Non-numeric input');
 

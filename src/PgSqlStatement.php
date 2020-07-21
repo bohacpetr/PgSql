@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace bohyn\PgSql;
 
@@ -24,7 +25,6 @@ class PgSqlStatement implements IteratorAggregate
 
     /**
      * @internal To be used only by PgSqlConnection
-     *
      * @param resource $result
      */
     public function __construct($result)
