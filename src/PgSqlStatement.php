@@ -7,6 +7,9 @@ namespace bohyn\PgSql;
 use Generator;
 use IteratorAggregate;
 
+/**
+ * @implements IteratorAggregate<mixed>
+ */
 class PgSqlStatement implements IteratorAggregate
 {
 
