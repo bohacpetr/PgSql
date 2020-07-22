@@ -21,7 +21,7 @@ class PgSqlConnection
     /**
      * @param string $dsn
      * @param ConvertorCollection $convertors
-     * @param int $params
+     * @param int $params Currently only value is 0 or PGSQL_CONNECT_FORCE_NEW
      */
     public function __construct(string $dsn, ConvertorCollection $convertors, int $params = 0)
     {
