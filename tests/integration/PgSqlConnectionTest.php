@@ -16,7 +16,7 @@ class PgSqlConnectionTest extends TestCase
 
     public function testConnect(): void
     {
-        $conn = new PgSqlConnection(self::DSN, PGSQL_CONNECT_FORCE_NEW);
+        $conn = new PgSqlConnection(self::DSN, new ConvertorCollection(), PGSQL_CONNECT_FORCE_NEW);
         $result = $conn->query('SELECT 1');
         $this->assertInstanceOf(PgSqlStatement::class, $result);
         $this->assertEquals(1, $result->numRows());
@@ -31,7 +31,7 @@ class PgSqlConnectionTest extends TestCase
         $this->expectException(PgSqlException::class);
         $this->expectExceptionMessage("Connect failed");
 
-        new PgSqlConnection('host=localhost user=nonexisting password=nonexisting');
+        new PgSqlConnection('host=localhost user=nonexisting password=nonexisting', new ConvertorCollection());
     }
 
     public function testQuery(): void
@@ -103,7 +103,7 @@ class PgSqlConnectionTest extends TestCase
         $channel = md5((string)rand());
         $timeout = 10000;
 
-        $conn = new PgSqlConnection(self::DSN, PGSQL_CONNECT_FORCE_NEW);
+        $conn = new PgSqlConnection(self::DSN, new ConvertorCollection(), PGSQL_CONNECT_FORCE_NEW);
         $this->conn->query(sprintf('LISTEN "%s"', $channel));
 
         $start = microtime(true);
@@ -201,6 +201,6 @@ class PgSqlConnectionTest extends TestCase
     {
         parent::setUp();
 
-        $this->conn = new PgSqlConnection(self::DSN, PGSQL_CONNECT_FORCE_NEW);
+        $this->conn = new PgSqlConnection(self::DSN, new ConvertorCollection(), PGSQL_CONNECT_FORCE_NEW);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace bohyn\PgSql;
 
+use bohyn\PgSql\Convertor\ConvertorCollection;
 use PHPUnit\Framework\TestCase;
 
 class PgSqlBuilderTest extends TestCase
@@ -177,7 +178,11 @@ class PgSqlBuilderTest extends TestCase
     {
         parent::setUp();
 
-        $conn = new PgSqlConnection('host=localhost user=postgres password=postgres', PGSQL_CONNECT_FORCE_NEW);
+        $conn = new PgSqlConnection(
+            'host=localhost user=postgres password=postgres',
+            new ConvertorCollection(),
+            PGSQL_CONNECT_FORCE_NEW
+        );
         $this->builder = new PgSqlBuilder($conn);
     }
 }
