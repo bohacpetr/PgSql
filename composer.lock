@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35895ede2acbe822f0b4f8a323c617c0",
+    "content-hash": "433c9fad2ab8872b79ae3ee4cbac4568",
     "packages": [
         {
             "name": "bohacpetr/enum",
