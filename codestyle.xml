@@ -30,7 +30,7 @@
 		<exclude name="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator.MultiLineTernaryOperatorNotUsed"/>
 		<exclude name="SlevomatCodingStandard.ControlStructures.RequireYodaComparison"/>
 		<exclude name="SlevomatCodingStandard.Functions.RequireArrowFunction.RequiredArrowFunction"/>
-		<exclude name="SlevomatCodingStandard.Functions.TrailingCommaInCall.MissingTrailingComma"/>
+		<exclude name="SlevomatCodingStandard.Functions.TrailingCommaInCall.MissingTrailingComma"/> <!-- PHP 7.3+ -->
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation.NonFullyQualifiedClassName"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedExceptions"/>
 		<exclude name="SlevomatCodingStandard.Namespaces.FullyQualifiedGlobalConstants.NonFullyQualified"/>
@@ -45,7 +45,7 @@
 		<exclude name="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax.DisallowedArrayTypeHintSyntax"/>
 		<exclude name="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint"/>
 		<exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.UselessAnnotation"/>
-		<exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint"/>
+		<exclude name="SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint"/> <!-- PHP 7.4+ -->
 		<exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.UselessAnnotation"/>
 	</rule>
 
