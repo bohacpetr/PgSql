@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace bohyn\PgSql;
 
+use bohyn\PgSql\Convertor\ConvertorCollection;
 use Generator;
 use IteratorAggregate;
 
@@ -25,12 +26,15 @@ class PgSqlStatement implements IteratorAggregate
      * @var string|null
      */
     private $className;
+    /** @var ConvertorCollection */
+    private $convertors;
 
     /**
-     * @internal To be used only by PgSqlConnection
      * @param resource $result
+     * @param ConvertorCollection $convertors
+     * @internal To be used only by PgSqlConnection
      */
-    public function __construct($result)
+    public function __construct($result, ConvertorCollection $convertors)
     {
         $this->result = $result;
 
@@ -38,6 +42,7 @@ class PgSqlStatement implements IteratorAggregate
             $type = pg_field_type($this->result, $i);
             $this->fieldTypes[pg_field_name($this->result, $i)] = $type;
         }
+        $this->convertors = $convertors;
     }
 
     public function __destruct()
@@ -78,7 +83,7 @@ class PgSqlStatement implements IteratorAggregate
         $row = pg_fetch_assoc($this->result, $rowNum);
 
         if ($row) {
-            return Helper::decodeRow($row, $this->fieldTypes);
+            return $this->convertors->encodeValues($row);
         }
 
         return $row;
@@ -101,7 +106,7 @@ class PgSqlStatement implements IteratorAggregate
             return false;
         }
 
-        return Helper::decodeRow($row, $this->fieldTypes);
+        return $this->convertors->decodeRow($row, $this->fieldTypes);
     }
 
     /**
