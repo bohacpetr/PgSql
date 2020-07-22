@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace bohyn\PgSql;
 
+use bohyn\PgSql\Convertor\ConvertorCollection;
+
 class PgSqlConnection
 {
 
@@ -97,7 +99,7 @@ class PgSqlConnection
         }
 
         if (is_resource($result)) {
-            return new PgSqlStatement($result);
+            return new PgSqlStatement($result, new ConvertorCollection());
         }
 
         $this->throwLastError($query, $params);
@@ -188,7 +190,7 @@ class PgSqlConnection
         $result = @pg_execute($this->conn, $name, $params);
 
         if (is_resource($result)) {
-            return new PgSqlStatement($result);
+            return new PgSqlStatement($result, new ConvertorCollection());
         }
 
         $query = sprintf('EXECUTE %s', $this->escapeIdentifier($name));
