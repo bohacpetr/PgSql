@@ -29,7 +29,7 @@ class BoolArrayConvertor implements ITypeConvertor
         $values = explode(',', trim($stringValue, '{}'));
 
         return array_map(
-            static function ($value): ?bool {
+            function ($value): ?bool {
                 if (strtoupper($value) === 'NULL') {
                     return null;
                 }
@@ -52,7 +52,7 @@ class BoolArrayConvertor implements ITypeConvertor
         }
 
         $values = array_map(
-            static function ($value): string {
+            function ($value): string {
                 if ($value === null) {
                     return 'NULL';
                 }

@@ -9,7 +9,7 @@ class TextConvertor implements ITypeConvertor
 
     /**
      * @param string|null $stringValue
-     * @return string
+     * @return string|null
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
     public function fromString(?string $stringValue)

@@ -64,7 +64,7 @@ class PgSqlStatement implements IteratorAggregate
         $value = pg_num_rows($this->result) ? pg_fetch_result($this->result, 0, 0) : null;
 
         if ($value !== null) {
-            return Helper::decodeValue($value, array_shift($this->fieldTypes));
+            return $this->convertors->decodeRow($value, array_shift($this->fieldTypes));
         }
 
         return $value;
