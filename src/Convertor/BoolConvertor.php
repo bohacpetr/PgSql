@@ -26,7 +26,7 @@ class BoolConvertor implements ITypeConvertor
     }
 
     /**
-     * @param bool|null $value
+     * @param bool|mixed|null $value
      * @return string|null
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */

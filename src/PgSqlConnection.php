@@ -15,13 +15,15 @@ class PgSqlConnection
     private $conn;
     /** @var PgSqlBuilder */
     private $sqlBuilder;
+    /** @var ConvertorCollection */
+    private $convertors;
 
     /**
      * @param string $dsn
+     * @param ConvertorCollection $convertors
      * @param int $params
-     * @throws PgSqlException
      */
-    public function __construct(string $dsn, int $params = 0)
+    public function __construct(string $dsn, ConvertorCollection $convertors, int $params = 0)
     {
         $this->dsn = $dsn;
         $conn = @pg_connect($this->dsn, $params);
@@ -32,6 +34,7 @@ class PgSqlConnection
 
         $this->conn = $conn;
         $this->sqlBuilder = new PgSqlBuilder($this);
+        $this->convertors = $convertors;
     }
 
     public function __destruct()
@@ -90,7 +93,7 @@ class PgSqlConnection
     public function query(string $query, array $params = []): PgSqlStatement
     {
         if ($params !== []) {
-            $params = Helper::encodeParams($this, $params);
+            $params = $this->convertors->encodeValues($params);
             // @ is to prevent error handler intervention
             $result = @pg_query_params($this->conn, $query, $params);
         } else {
@@ -269,6 +272,7 @@ class PgSqlConnection
     public function getNotify(int $timeout = 0): array
     {
         $notify = pg_get_notify($this->conn, PGSQL_ASSOC);
+        /** @var array|false $notify */
 
         if (is_array($notify)) {
             return $notify;
