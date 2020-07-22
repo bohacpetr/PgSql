@@ -10,6 +10,7 @@ class BoolConvertor implements ITypeConvertor
     /**
      * @param string|null $stringValue
      * @return bool|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
     public function fromString(?string $stringValue)
     {
@@ -17,7 +18,7 @@ class BoolConvertor implements ITypeConvertor
             return null;
         }
 
-        if (preg_match('~^[tf]$~', $stringValue) === 0) {
+        if ($stringValue !== 't' && $stringValue !== 'f') {
             throw new TypeConversionException('Unexpected value, expecting "t" or "f"');
         }
 
@@ -27,6 +28,7 @@ class BoolConvertor implements ITypeConvertor
     /**
      * @param bool|null $value
      * @return string|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function toString($value): ?string
     {

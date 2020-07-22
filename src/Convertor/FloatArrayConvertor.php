@@ -10,6 +10,7 @@ class FloatArrayConvertor implements ITypeConvertor
     /**
      * @param string|null $stringValue
      * @return float[]|null[]|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
     public function fromString(?string $stringValue)
     {
@@ -30,6 +31,7 @@ class FloatArrayConvertor implements ITypeConvertor
     /**
      * @param float[]|null[]|null $values
      * @return string|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function toString($values): ?string
     {

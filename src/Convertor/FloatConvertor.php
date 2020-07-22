@@ -10,6 +10,7 @@ class FloatConvertor implements ITypeConvertor
     /**
      * @param string|null $stringValue
      * @return float|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
     public function fromString(?string $stringValue)
     {
@@ -19,6 +20,7 @@ class FloatConvertor implements ITypeConvertor
     /**
      * @param float|null $value
      * @return string|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function toString($value): ?string
     {

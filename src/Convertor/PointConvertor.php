@@ -17,6 +17,11 @@ class PointConvertor implements ITypeConvertor
         $this->floatConvertor = new FloatConvertor();
     }
 
+    /**
+     * @param string|null $stringValue
+     * @return Point|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+     */
     public function fromString(?string $stringValue)
     {
         if ($stringValue === null) {
@@ -36,6 +41,11 @@ class PointConvertor implements ITypeConvertor
         return new Point($x, $y);
     }
 
+    /**
+     * @param Point|null $value
+     * @return string|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+     */
     public function toString($value): ?string
     {
         if ($value === null) {

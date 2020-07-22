@@ -42,6 +42,7 @@ class PgSqlStatement implements IteratorAggregate
             $type = pg_field_type($this->result, $i);
             $this->fieldTypes[pg_field_name($this->result, $i)] = $type;
         }
+
         $this->convertors = $convertors;
     }
 

@@ -17,6 +17,7 @@ class DateConvertor implements ITypeConvertor
      * @param string|null $stringValue
      * @return DateTimeImmutable|null
      * @throws TypeConversionException
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
     public function fromString(?string $stringValue)
     {
@@ -36,6 +37,7 @@ class DateConvertor implements ITypeConvertor
     /**
      * @param DateTimeInterface|string|null $value
      * @return string|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function toString($value): ?string
     {

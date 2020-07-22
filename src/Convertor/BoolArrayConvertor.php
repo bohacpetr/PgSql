@@ -18,6 +18,7 @@ class BoolArrayConvertor implements ITypeConvertor
     /**
      * @param string|null $stringValue
      * @return bool[]|null[]|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
     public function fromString(?string $stringValue)
     {
@@ -42,6 +43,7 @@ class BoolArrayConvertor implements ITypeConvertor
     /**
      * @param bool[]|null[]|null $values
      * @return string|null
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function toString($values): ?string
     {
