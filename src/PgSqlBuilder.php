@@ -43,8 +43,9 @@ class PgSqlBuilder
         );
 
         $valuePlaceholders = [];
+        $valuesCount = count($values);
 
-        for ($i = 1; $i <= count($values); $i++) {
+        for ($i = 1; $i <= $valuesCount; $i++) {
             $valuePlaceholders[] = '$' . $i;
         }
 

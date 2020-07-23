@@ -14,7 +14,7 @@ class TextConvertor implements ITypeConvertor
      */
     public function fromString(?string $stringValue)
     {
-        return $stringValue !== null ? (string)$stringValue : null;
+        return $stringValue;
     }
 
     /**

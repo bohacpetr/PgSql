@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace bohyn\PgSql;
 
+use bohyn\PgSql\Convertor\ConvertorCollection;
 use PHPUnit\Framework\TestCase;
 
 class PgSqlConnectionTest extends TestCase
 {
 
     private const DSN = 'host=localhost user=postgres password=postgres';
+    private const NONEXISTING_DSN = 'host=localhost user=postgres password=postgres';
 
     /** @var PgSqlConnection */
     private $conn;
@@ -31,7 +33,7 @@ class PgSqlConnectionTest extends TestCase
         $this->expectException(PgSqlException::class);
         $this->expectExceptionMessage("Connect failed");
 
-        new PgSqlConnection('host=localhost user=nonexisting password=nonexisting', new ConvertorCollection());
+        new PgSqlConnection(self::NONEXISTING_DSN, new ConvertorCollection());
     }
 
     public function testQuery(): void
@@ -111,7 +113,7 @@ class PgSqlConnectionTest extends TestCase
         $this->assertEquals([], $result);
         $end = microtime(true);
 
-        $this->assertTrue($end - $start >= $timeout / 1000000, 'getNotify did not waited for timeout');
+        $this->assertGreaterThanOrEqual($timeout / 1000000, $end - $start, 'getNotify did not waited for timeout');
 
         $result = $conn->query('SELECT pg_backend_pid()');
         $pid = $result->fetchColumn();

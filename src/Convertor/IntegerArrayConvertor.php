@@ -29,7 +29,7 @@ class IntegerArrayConvertor implements ITypeConvertor
     }
 
     /**
-     * @param int[]|null[]|null $values
+     * @param mixed[]|null[]|null $values
      * @return string|null
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */

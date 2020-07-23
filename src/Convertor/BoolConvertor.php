@@ -37,7 +37,7 @@ class BoolConvertor implements ITypeConvertor
         }
 
         if (is_bool($value)) {
-            return $value === true ? 't' : 'f';
+            return $value ? 't' : 'f';
         }
 
         throw new TypeConversionException('Unexpected value, expecting boolean');

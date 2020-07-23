@@ -57,7 +57,10 @@ class BoolArrayConvertor implements ITypeConvertor
                     return 'NULL';
                 }
 
-                return $this->boolConvertor->toString($value);
+                /** @var string $value */
+                $value = $this->boolConvertor->toString($value);
+
+                return $value;
             },
             $values
         );

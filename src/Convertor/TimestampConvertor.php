@@ -51,8 +51,8 @@ class TimestampConvertor implements ITypeConvertor
             }
         }
 
-        $timestamp = $value->format(self::TIMESTAMP_FORMAT);
         /** @var string|false $timestamp */
+        $timestamp = $value->format(self::TIMESTAMP_FORMAT);
 
         if ($timestamp === false) {
             throw new PgSqlInternalError('Invalid timestamp format');

@@ -6,6 +6,6 @@ namespace bohyn\PgSql\Convertor;
 
 use InvalidArgumentException;
 
-class TypeConversionException extends InvalidArgumentException
+final class TypeConversionException extends InvalidArgumentException
 {
 }
