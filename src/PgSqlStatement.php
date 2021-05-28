@@ -70,11 +70,6 @@ class PgSqlStatement implements IteratorAggregate
         return $value;
     }
 
-    public function affectedtRows(): int
-    {
-        return pg_affected_rows($this->result);
-    }
-
     /**
      * @param int $rowNum Row number to fetch
      * @return bool|mixed[]
@@ -125,7 +120,15 @@ class PgSqlStatement implements IteratorAggregate
     }
 
     /**
-     * @return int will return the number of rows in a PostgreSQL result resource.
+     * @return int will return the number of rows affected by INSERT/UPDATE/DELETE
+     */
+    public function affectedRows(): int
+    {
+        return pg_affected_rows($this->result);
+    }
+
+    /**
+     * @return int will return the number of rows in a PostgreSQL result resource. Use only on SELECT
      */
     public function numRows(): int
     {
