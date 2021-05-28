@@ -37,17 +37,24 @@ class ConvertorCollection
     }
 
     /**
-     * @param mixed[] $row
-     * @param string[] $fieldTypes
-     * @return mixed[]
+     * @param string|string[]|null $row
+     * @param string|string[] $fieldTypes
+     * @return mixed
      */
-    public function decodeRow(array $row, array $fieldTypes): array
+    public function decodeRow($row, $fieldTypes)
     {
-        foreach ($row as $name => &$value) {
-            $type = $fieldTypes[$name] ?? null;
+        if(is_array($row)) {
+            foreach ($row as $name => &$value) {
+                $type = $fieldTypes[$name] ?? null;
 
-            if (isset($this->pgToPhpMap[$type])) {
-                $value = $this->pgToPhpMap[$type]->fromString($value);
+                if (isset($this->pgToPhpMap[$type])) {
+                    $value = $this->pgToPhpMap[$type]->fromString($value);
+                }
+            }
+        }
+        else {
+            if (isset($this->pgToPhpMap[$fieldTypes])) {
+                $row = $this->pgToPhpMap[$fieldTypes]->fromString($row);
             }
         }
 
