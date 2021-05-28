@@ -118,7 +118,7 @@ class PgSqlConnection
     {
         $sql = $this->sqlBuilder->buildSelect($tableName, $predicates);
 
-        return $this->query($sql);
+        return $this->query($sql, $predicates);
     }
 
     /**
@@ -144,9 +144,8 @@ class PgSqlConnection
     public function update(string $table, array $set, array $predicates): PgSqlStatement
     {
         $sql = $this->sqlBuilder->buildUpdate($table, $set, $predicates);
-        $params = $set + $predicates;
 
-        return $this->query($sql, $params);
+        return $this->query($sql, $predicates);
     }
 
     /**
