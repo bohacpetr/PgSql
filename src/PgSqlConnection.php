@@ -102,7 +102,7 @@ class PgSqlConnection
         }
 
         if (is_resource($result)) {
-            return new PgSqlStatement($result, new ConvertorCollection());
+            return new PgSqlStatement($result, $this->convertors);
         }
 
         $this->throwLastError($query, $params);
@@ -192,7 +192,7 @@ class PgSqlConnection
         $result = @pg_execute($this->conn, $name, $params);
 
         if (is_resource($result)) {
-            return new PgSqlStatement($result, new ConvertorCollection());
+            return new PgSqlStatement($result, $this->convertors);
         }
 
         $query = sprintf('EXECUTE %s', $this->escapeIdentifier($name));
