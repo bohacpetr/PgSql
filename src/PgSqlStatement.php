@@ -91,18 +91,28 @@ class PgSqlStatement implements IteratorAggregate
      */
     public function fetchObject(?string $className = null, ?int $row = null)
     {
-        $className = $className ?: $this->className;
 
         /** @var object|bool $row */
-        $row = $className !== null
-            ? pg_fetch_object($this->result, $row, $className)
-            : pg_fetch_object($this->result, $row);
+        $row = pg_fetch_assoc($this->result, $row);
 
         if ($row === false) {
             return false;
         }
 
-        return $this->convertors->decodeRow($row, $this->fieldTypes);
+        $row = $this->convertors->decodeRow($row, $this->fieldTypes);
+        $className = $className ?: $this->className;
+
+        if($className !== null) {
+            $class = new $className();
+
+            foreach($row as $column => $value) {
+                $class->$column = $value;
+            }
+
+            $row = $class;
+        }
+
+        return $row;
     }
 
     /**
