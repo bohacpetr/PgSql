@@ -12,7 +12,7 @@ use Throwable;
 class TimestampConvertor implements ITypeConvertor
 {
 
-    private const TIMESTAMP_FORMAT = 'Y-m-d H:i:s.uP';
+    private const TIMESTAMP_FORMAT = 'Y-m-d H:i:s.u';
 
     /**
      * @param string|null $stringValue
