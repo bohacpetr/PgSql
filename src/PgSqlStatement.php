@@ -57,7 +57,7 @@ class PgSqlStatement implements IteratorAggregate
     }
 
     /**
-     * @return mixed first column first row || false
+     * @return mixed|false first column first row
      */
     public function fetchColumn()
     {
@@ -79,7 +79,7 @@ class PgSqlStatement implements IteratorAggregate
         $row = pg_fetch_assoc($this->result, $rowNum);
 
         if ($row) {
-            return $this->convertors->encodeValues($row);
+            return $this->convertors->decodeRow($row, $this->fieldTypes);
         }
 
         return $row;
@@ -118,8 +118,9 @@ class PgSqlStatement implements IteratorAggregate
     /**
      * @return mixed[][]
      */
-    public function fetchAll(): array
+    public function fetchAll(?string $className = null): array
     {
+        $this->className = $className;
         $result = [];
 
         foreach ($this as $row) {
