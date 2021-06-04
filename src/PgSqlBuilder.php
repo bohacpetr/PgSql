@@ -7,8 +7,7 @@ namespace bohyn\PgSql;
 class PgSqlBuilder
 {
 
-    /** @var PgSqlConnection */
-    private $conn;
+    private PgSqlConnection $conn;
 
     public function __construct(PgSqlConnection $conn)
     {
@@ -103,7 +102,7 @@ class PgSqlBuilder
 
     /**
      * @param mixed[] $predicates
-     * @param int $offset
+     * @param int $offset predicates placeholder index offset (WHERE x = $Y)
      * @return string
      */
     public function buildWhere(array &$predicates, int $offset = 0): string

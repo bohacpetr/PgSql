@@ -12,7 +12,7 @@ class FloatConvertor implements ITypeConvertor
      * @return float|null
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function fromString(?string $stringValue)
+    public function fromString(?string $stringValue): ?float
     {
         return $stringValue !== null ? (float)$stringValue : null;
     }
@@ -24,6 +24,6 @@ class FloatConvertor implements ITypeConvertor
      */
     public function toString($value): ?string
     {
-        return $value !== null ? (string)$value : null;
+        return $value !== null ? (string)(float)$value : null;
     }
 }

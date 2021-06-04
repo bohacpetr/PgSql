@@ -9,14 +9,11 @@ use bohyn\PgSql\Convertor\ConvertorCollection;
 class PgSqlConnection
 {
 
-    /** @var string */
-    private $dsn;
+    private string $dsn;
     /** @var resource */
     private $conn;
-    /** @var PgSqlBuilder */
-    private $sqlBuilder;
-    /** @var ConvertorCollection */
-    private $convertors;
+    private PgSqlBuilder $sqlBuilder;
+    private ConvertorCollection $convertors;
 
     /**
      * @param string $dsn

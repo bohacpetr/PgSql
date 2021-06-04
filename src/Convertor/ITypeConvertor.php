@@ -7,15 +7,7 @@ namespace bohyn\PgSql\Convertor;
 interface ITypeConvertor
 {
 
-    /**
-     * @param string|null $stringValue
-     * @return mixed|null
-     */
-    public function fromString(?string $stringValue);
+	public function fromString(?string $stringValue): mixed;
 
-    /**
-     * @param mixed|null $value
-     * @return string|null
-     */
-    public function toString($value): ?string;
+	public function toString(mixed $value): ?string;
 }

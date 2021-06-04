@@ -7,10 +7,8 @@ namespace bohyn\PgSql;
 class PgSqlPreparedStatement
 {
 
-    /** @var PgSqlConnection */
-    private $db;
-    /** @var string */
-    private $name;
+    private PgSqlConnection $db;
+    private string $name;
 
     public function __construct(PgSqlConnection $db, string $name)
     {

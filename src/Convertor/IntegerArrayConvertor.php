@@ -7,12 +7,18 @@ namespace bohyn\PgSql\Convertor;
 class IntegerArrayConvertor implements ITypeConvertor
 {
 
+	private IntegerConvertor $integerConvertor;
+
+	public function __construct() {
+		$this->integerConvertor = new IntegerConvertor();
+	}
+
     /**
      * @param string|null $stringValue
      * @return int[]|null[]|null
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function fromString(?string $stringValue)
+    public function fromString(?string $stringValue): ?array
     {
         if ($stringValue === null) {
             return null;
@@ -22,7 +28,7 @@ class IntegerArrayConvertor implements ITypeConvertor
 
         return array_map(
             static function (string $value): ?int {
-                return strtoupper($value) !== 'NULL' ? (int)$value : null;
+                return $this->integerConvertor->fromString($value);
             },
             $values
         );
@@ -41,7 +47,7 @@ class IntegerArrayConvertor implements ITypeConvertor
 
         $values = array_map(
             static function ($value) {
-                return $value !== null ? (int)$value : 'NULL';
+                return $this->integerConvertor->toString($value);
             },
             $values
         );

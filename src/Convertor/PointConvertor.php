@@ -9,20 +9,14 @@ use bohyn\PgSql\DataType\Point;
 class PointConvertor implements ITypeConvertor
 {
 
-    /** @var FloatConvertor */
-    private $floatConvertor;
+    private FloatConvertor $floatConvertor;
 
     public function __construct()
     {
         $this->floatConvertor = new FloatConvertor();
     }
 
-    /**
-     * @param string|null $stringValue
-     * @return Point|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-     */
-    public function fromString(?string $stringValue)
+    public function fromString(?string $stringValue): ?Point
     {
         if ($stringValue === null) {
             return null;
@@ -43,10 +37,8 @@ class PointConvertor implements ITypeConvertor
 
     /**
      * @param Point|null $value
-     * @return string|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
-    public function toString($value): ?string
+    public function toString(mixed $value): ?string
     {
         if ($value === null) {
             return null;

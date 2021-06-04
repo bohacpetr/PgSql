@@ -8,11 +8,9 @@ class BoolConvertor implements ITypeConvertor
 {
 
     /**
-     * @param string|null $stringValue
-     * @return bool|null
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function fromString(?string $stringValue)
+    public function fromString(?string $stringValue): ?bool
     {
         if ($stringValue === null) {
             return null;
@@ -26,8 +24,7 @@ class BoolConvertor implements ITypeConvertor
     }
 
     /**
-     * @param bool|mixed|null $value
-     * @return string|null
+     * @param bool|null $value
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     public function toString($value): ?string

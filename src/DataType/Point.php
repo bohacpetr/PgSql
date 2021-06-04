@@ -7,10 +7,8 @@ namespace bohyn\PgSql\DataType;
 class Point
 {
 
-    /** @var float */
-    private $x;
-    /** @var float */
-    private $y;
+    private float $x;
+    private float $y;
 
     public function __construct(float $x, float $y)
     {

@@ -22,7 +22,7 @@
 	"ext-json": "*",
 	"ext-mbstring": "*",
 	"ext-pgsql": "*",
-	"php": ">=7.1"
+	"php": ">=8.0"
   },
   "require-dev": {
 	"ext-sockets": "*",

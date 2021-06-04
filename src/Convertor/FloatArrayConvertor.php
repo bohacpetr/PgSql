@@ -7,12 +7,18 @@ namespace bohyn\PgSql\Convertor;
 class FloatArrayConvertor implements ITypeConvertor
 {
 
+	private FloatConvertor $floatConvertor;
+
+	public function __construct()
+	{
+		$this->floatConvertor = new FloatConvertor();
+	}
+
     /**
      * @param string|null $stringValue
      * @return float[]|null[]|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      */
-    public function fromString(?string $stringValue)
+    public function fromString(?string $stringValue): ?array
     {
         if ($stringValue === null) {
             return null;
@@ -21,19 +27,18 @@ class FloatArrayConvertor implements ITypeConvertor
         $values = explode(',', trim($stringValue, '{}'));
 
         return array_map(
-            static function ($value): ?float {
-                return strtoupper($value) !== 'NULL' ? (float)$value : null;
+            function ($value): ?float {
+                return $this->floatConvertor->fromString($value);
             },
             $values
         );
     }
 
     /**
-     * @param mixed[]|null[]|null $values
+     * @param float[]|null[]|null $values
      * @return string|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
-    public function toString($values): ?string
+    public function toString(mixed $values): ?string
     {
         if ($values === null) {
             return null;
@@ -41,7 +46,7 @@ class FloatArrayConvertor implements ITypeConvertor
 
         $values = array_map(
             static function ($value): string {
-                return $value !== null ? (string)(float)$value : 'NULL';
+                return $this->floatConvertor->toString($value);
             },
             $values
         );

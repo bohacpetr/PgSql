@@ -8,9 +8,14 @@ class ConvertorCollection
 {
 
     /** @var ITypeConvertor[] */
-    private $pgToPhpMap = [];
+    private array $pgToPhpMap;
     /** @var ITypeConvertor[] */
-    private $phpToPgMap = [];
+    private array $phpToPgMap;
+
+    public function __construct() {
+    	$this->pgToPhpMap = [];
+    	$this->phpToPgMap = [];
+	}
 
     /**
      * @param ITypeConvertor $convertor
