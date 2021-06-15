@@ -14,149 +14,148 @@ use IteratorAggregate;
 class PgSqlStatement implements IteratorAggregate
 {
 
-    /** @var resource */
-    private $result;
+	/** @var resource */
+	private $result;
 
-    /** @var string[] */
-    private $fieldTypes = [];
+	/** @var string[] */
+	private $fieldTypes = [];
 
-    /**
-     * Default class name for fetchObject
-     *
-     * @var string|null
-     */
-    private $className;
-    /** @var ConvertorCollection */
-    private $convertors;
+	/**
+	 * Default class name for fetchObject
+	 *
+	 * @var string|null
+	 */
+	private $className;
+	/** @var ConvertorCollection */
+	private $convertors;
 
-    /**
-     * @param resource $result
-     * @param ConvertorCollection $convertors
-     * @internal To be used only by PgSqlConnection
-     */
-    public function __construct($result, ConvertorCollection $convertors)
-    {
-        $this->result = $result;
+	/**
+	 * @param resource $result
+	 * @param ConvertorCollection $convertors
+	 * @internal To be used only by PgSqlConnection
+	 */
+	public function __construct($result, ConvertorCollection $convertors)
+	{
+		$this->result = $result;
 
-        for ($i = 0, $count = pg_num_fields($this->result); $i < $count; $i++) {
-            $type = pg_field_type($this->result, $i);
-            $this->fieldTypes[pg_field_name($this->result, $i)] = $type;
-        }
+		for ($i = 0, $count = pg_num_fields($this->result); $i < $count; $i++) {
+			$type = pg_field_type($this->result, $i);
+			$this->fieldTypes[pg_field_name($this->result, $i)] = $type;
+		}
 
-        $this->convertors = $convertors;
-    }
+		$this->convertors = $convertors;
+	}
 
-    public function __destruct()
-    {
-        pg_free_result($this->result);
-    }
+	public function __destruct()
+	{
+		pg_free_result($this->result);
+	}
 
-    public function setClassName(string $className): void
-    {
-        $this->className = $className;
-    }
+	public function setClassName(string $className): void
+	{
+		$this->className = $className;
+	}
 
-    /**
-     * @return mixed|false first column first row
-     */
-    public function fetchColumn()
-    {
-        $value = pg_num_rows($this->result) !== 0 ? pg_fetch_result($this->result, 0, 0) : null;
+	/**
+	 * @return mixed|false first column first row
+	 */
+	public function fetchColumn()
+	{
+		$value = pg_num_rows($this->result) !== 0 ? pg_fetch_result($this->result, 0, 0) : null;
 
-        if ($value !== null) {
-            return $this->convertors->decodeRow($value, array_shift($this->fieldTypes));
-        }
+		if ($value !== null) {
+			return $this->convertors->decodeRow($value, array_shift($this->fieldTypes));
+		}
 
-        return $value;
-    }
+		return $value;
+	}
 
-    /**
-     * @param int $rowNum Row number to fetch
-     * @return bool|mixed[]
-     */
-    public function fetchAssoc(?int $rowNum = null)
-    {
-        $row = pg_fetch_assoc($this->result, $rowNum);
+	/**
+	 * @return mixed[][]
+	 */
+	public function fetchAll(?string $className = null): array
+	{
+		$this->className = $className;
+		$result = [];
 
-        if ($row) {
-            return $this->convertors->decodeRow($row, $this->fieldTypes);
-        }
+		foreach ($this as $row) {
+			$result[] = $row;
+		}
 
-        return $row;
-    }
+		return $result;
+	}
 
-    /**
-     * @param int $row Row number to fetch
-     * @return bool|mixed[]
-     */
-    public function fetchObject(?string $className = null, ?int $row = null)
-    {
+	/**
+	 * @return int will return the number of rows affected by INSERT/UPDATE/DELETE
+	 */
+	public function affectedRows(): int
+	{
+		return pg_affected_rows($this->result);
+	}
 
-        /** @var object|bool $row */
-        $row = pg_fetch_assoc($this->result, $row);
+	/**
+	 * @return int will return the number of rows in a PostgreSQL result resource. Use only on SELECT
+	 */
+	public function numRows(): int
+	{
+		return pg_numrows($this->result);
+	}
 
-        if ($row === false) {
-            return false;
-        }
+	public function getIterator(): Generator
+	{
+		$this->seek(0);
 
-        $row = $this->convertors->decodeRow($row, $this->fieldTypes);
-        $className = $className ?: $this->className;
+		while (($row = $this->className ? $this->fetchObject() : $this->fetchAssoc())) {
+			yield $row;
+		}
+	}
 
-        if($className !== null) {
-            $class = new $className();
+	public function seek(int $offset): bool
+	{
+		return pg_result_seek($this->result, $offset);
+	}
 
-            foreach($row as $column => $value) {
-                $class->$column = $value;
-            }
+	/**
+	 * @param int $row Row number to fetch
+	 * @return bool|mixed[]
+	 */
+	public function fetchObject(?string $className = null, ?int $row = null)
+	{
+		/** @var object|bool $row */
+		$row = pg_fetch_assoc($this->result, $row);
 
-            $row = $class;
-        }
+		if ($row === false) {
+			return false;
+		}
 
-        return $row;
-    }
+		$row = $this->convertors->decodeRow($row, $this->fieldTypes);
+		$className = $className ?: $this->className;
 
-    /**
-     * @return mixed[][]
-     */
-    public function fetchAll(?string $className = null): array
-    {
-        $this->className = $className;
-        $result = [];
+		if ($className !== null) {
+			$class = new $className();
 
-        foreach ($this as $row) {
-            $result[] = $row;
-        }
+			foreach ($row as $column => $value) {
+				$class->$column = $value;
+			}
 
-        return $result;
-    }
+			$row = $class;
+		}
 
-    /**
-     * @return int will return the number of rows affected by INSERT/UPDATE/DELETE
-     */
-    public function affectedRows(): int
-    {
-        return pg_affected_rows($this->result);
-    }
+		return $row;
+	}
 
-    /**
-     * @return int will return the number of rows in a PostgreSQL result resource. Use only on SELECT
-     */
-    public function numRows(): int
-    {
-        return pg_numrows($this->result);
-    }
+	/**
+	 * @param int $rowNum Row number to fetch
+	 * @return bool|mixed[]
+	 */
+	public function fetchAssoc(?int $rowNum = null)
+	{
+		$row = pg_fetch_assoc($this->result, $rowNum);
 
-    public function seek(int $offset): bool
-    {
-        return pg_result_seek($this->result, $offset);
-    }
+		if ($row) {
+			return $this->convertors->decodeRow($row, $this->fieldTypes);
+		}
 
-    public function getIterator(): Generator
-    {
-        $this->seek(0);
-
-        while (($row = $this->className ? $this->fetchObject() : $this->fetchAssoc())) {
-            yield $row;
-        }
-    }
+		return $row;
+	}
 }

@@ -13,6 +13,7 @@
 
 	<rule ref="vendor/squizlabs/php_codesniffer/src/Standards/PSR12/ruleset.xml">
 		<exclude name="Generic.Files.LineLength.TooLong"/> <!-- Duplicate to Slevomat sniff -->
+		<exclude name="Generic.WhiteSpace.DisallowTabIndent"/>
 		<exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/> <!-- Duplicate snif -->
 	</rule>
 
@@ -133,6 +134,7 @@
 		</properties>
 	</rule>
 
+	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
 	<rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
 </ruleset>

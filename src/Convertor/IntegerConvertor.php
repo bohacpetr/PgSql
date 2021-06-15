@@ -7,30 +7,30 @@ namespace bohyn\PgSql\Convertor;
 class IntegerConvertor implements ITypeConvertor
 {
 
-    /**
-     * @param string|null $stringValue
-     * @return int|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-     */
-    public function fromString(?string $stringValue)
-    {
-        if (!is_numeric($stringValue) && $stringValue !== null) {
-            throw new TypeConversionException('Non-numeric input');
-        }
+	/**
+	 * @param string|null $stringValue
+	 * @return int|null
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 */
+	public function fromString(?string $stringValue)
+	{
+		if (!is_numeric($stringValue) && $stringValue !== null) {
+			throw new TypeConversionException('Non-numeric input');
+		}
 
-        return $stringValue !== null ? (int)$stringValue : null;
-    }
+		return $stringValue !== null ? (int)$stringValue : null;
+	}
 
-    /**
-     * @param int|string|null $value
-     * @return string|null
-     */
-    public function toString($value): ?string
-    {
-        if (!is_numeric($value) && $value !== null) {
-            throw new TypeConversionException('Non-numeric input');
-        }
+	/**
+	 * @param int|string|null $value
+	 * @return string|null
+	 */
+	public function toString($value): ?string
+	{
+		if (!is_numeric($value) && $value !== null) {
+			throw new TypeConversionException('Non-numeric input');
+		}
 
-        return $value !== null ? (string)(int)$value : null;
-    }
+		return $value !== null ? (string)(int)$value : null;
+	}
 }

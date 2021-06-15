@@ -9,58 +9,58 @@ use bohyn\PgSql\DataType\Point;
 class PointConvertor implements ITypeConvertor
 {
 
-    /** @var FloatConvertor */
-    private $floatConvertor;
+	/** @var FloatConvertor */
+	private $floatConvertor;
 
-    public function __construct()
-    {
-        $this->floatConvertor = new FloatConvertor();
-    }
+	public function __construct()
+	{
+		$this->floatConvertor = new FloatConvertor();
+	}
 
-    /**
-     * @param string|null $stringValue
-     * @return Point|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-     */
-    public function fromString(?string $stringValue)
-    {
-        if ($stringValue === null) {
-            return null;
-        }
+	/**
+	 * @param string|null $stringValue
+	 * @return Point|null
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 */
+	public function fromString(?string $stringValue)
+	{
+		if ($stringValue === null) {
+			return null;
+		}
 
-        [$x, $y] = explode(',', substr($stringValue, 1, -1));
-        $x = $this->floatConvertor->fromString($x);
-        $y = $this->floatConvertor->fromString($y);
+		[$x, $y] = explode(',', substr($stringValue, 1, -1));
+		$x = $this->floatConvertor->fromString($x);
+		$y = $this->floatConvertor->fromString($y);
 
-        if ($x === null || $y === null) {
-            throw new TypeConversionException(
-                'Invalid point coordinates given: ' . var_export(['x' => $x, 'y' => $y])
-            );
-        }
+		if ($x === null || $y === null) {
+			throw new TypeConversionException(
+				'Invalid point coordinates given: ' . var_export(['x' => $x, 'y' => $y])
+			);
+		}
 
-        return new Point($x, $y);
-    }
+		return new Point($x, $y);
+	}
 
-    /**
-     * @param Point|null $value
-     * @return string|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-     */
-    public function toString($value): ?string
-    {
-        if ($value === null) {
-            return null;
-        }
+	/**
+	 * @param Point|null $value
+	 * @return string|null
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+	 */
+	public function toString($value): ?string
+	{
+		if ($value === null) {
+			return null;
+		}
 
-        if (!$value instanceof Point) {
-            $type = gettype($value);
-            $type = $type === 'object' ? get_class($value) : $type;
+		if (!$value instanceof Point) {
+			$type = gettype($value);
+			$type = $type === 'object' ? get_class($value) : $type;
 
-            throw new TypeConversionException(
-                sprintf('Value must be of type "%s" but "%s" given', Point::class, $type)
-            );
-        }
+			throw new TypeConversionException(
+				sprintf('Value must be of type "%s" but "%s" given', Point::class, $type)
+			);
+		}
 
-        return sprintf('(%s,%s)', $value->getX(), $value->getY());
-    }
+		return sprintf('(%s,%s)', $value->getX(), $value->getY());
+	}
 }

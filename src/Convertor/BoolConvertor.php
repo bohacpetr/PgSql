@@ -7,39 +7,39 @@ namespace bohyn\PgSql\Convertor;
 class BoolConvertor implements ITypeConvertor
 {
 
-    /**
-     * @param string|null $stringValue
-     * @return bool|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
-     */
-    public function fromString(?string $stringValue)
-    {
-        if ($stringValue === null) {
-            return null;
-        }
+	/**
+	 * @param string|null $stringValue
+	 * @return bool|null
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
+	 */
+	public function fromString(?string $stringValue)
+	{
+		if ($stringValue === null) {
+			return null;
+		}
 
-        if ($stringValue !== 't' && $stringValue !== 'f') {
-            throw new TypeConversionException('Unexpected value, expecting "t" or "f"');
-        }
+		if ($stringValue !== 't' && $stringValue !== 'f') {
+			throw new TypeConversionException('Unexpected value, expecting "t" or "f"');
+		}
 
-        return $stringValue === 't';
-    }
+		return $stringValue === 't';
+	}
 
-    /**
-     * @param bool|mixed|null $value
-     * @return string|null
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
-     */
-    public function toString($value): ?string
-    {
-        if ($value === null) {
-            return null;
-        }
+	/**
+	 * @param bool|mixed|null $value
+	 * @return string|null
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+	 */
+	public function toString($value): ?string
+	{
+		if ($value === null) {
+			return null;
+		}
 
-        if (is_bool($value)) {
-            return $value ? 't' : 'f';
-        }
+		if (is_bool($value)) {
+			return $value ? 't' : 'f';
+		}
 
-        throw new TypeConversionException('Unexpected value, expecting boolean');
-    }
+		throw new TypeConversionException('Unexpected value, expecting boolean');
+	}
 }
